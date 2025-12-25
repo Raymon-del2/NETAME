@@ -1,21 +1,29 @@
+// Moved from root `server.js` so that static assets in the project
+// are handled by Vercel’s static file serving and the API remains functional.
+
 const express = require('express');
 const cors = require('cors');
 const anigo = require('anigo-anime-api');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
 const path = require('path');
 
+const app = express();
+
+// Middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // Serve static files from the root
 
-// Root route to serve index.html
+// During local development you may want to serve static files as well.
+// In production, Vercel automatically serves files from the project root.
+if (process.env.NODE_ENV !== 'production') {
+    app.use(express.static(path.join(__dirname, '..')));
+}
+
+// Root route (optional: useful for local dev only)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-// API Endpoints
+// --- API Endpoints ---
 app.get('/api/search', async (req, res) => {
     try {
         const { q, page = 1 } = req.query;
@@ -67,6 +75,5 @@ app.get('/api/episode/:id', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Export the Express app for Vercel to wrap as a serverless function
+module.exports = app;
