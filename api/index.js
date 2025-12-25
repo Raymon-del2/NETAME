@@ -15,12 +15,12 @@ app.use(express.json());
 // During local development you may want to serve static files as well.
 // In production, Vercel automatically serves files from the project root.
 if (process.env.NODE_ENV !== 'production') {
-    app.use(express.static(path.join(__dirname, '..')));
+    app.use(express.static(path.join(__dirname, '..', 'public')));
 }
 
 // Root route (optional: useful for local dev only)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // --- API Endpoints ---
