@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wise Words | NETAME</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .quotes-container {
+            padding: 40px 5% 5rem 5%;
+        }
+
+        .quote-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            height: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition-smooth);
+            border: 1px solid var(--border-color);
+        }
+
+        .quote-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .quote-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .quote-card:hover .quote-bg {
+            transform: scale(1.1);
+        }
+
+        .quote-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .quote-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .quote-author {
+            color: var(--accent-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        .quote-anime {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .loading-quotes {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="crystal-overlay"></div>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" style="text-decoration: none;"><span class="logo-text">NETAME</span></a>
+            <button id="sidebar-toggle" class="sidebar-toggle">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+        </div>
+        <nav class="sidebar-links">
+            <a href="index.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Home</span>
+            </a>
+            <a href="schedule.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Schedule</span>
+            </a>
+            <a href="movies.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                </svg>
+                <span>Movies</span>
+            </a>
+            <a href="tv.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                    <polyline points="17 2 12 7 7 2"></polyline>
+                </svg>
+                <span>TV Series</span>
+            </a>
+            <a href="wisewords.html" class="sidebar-link active">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                <span>Wise Words</span>
+            </a>
+            <a href="chat.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>AI Assistant</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-search">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="anime-search" placeholder="Search...">
+        </div>
+    </aside>
+
+    <main class="quotes-container">
+        <section>
+            <div class="section-header">
+                <h2>Anime Wisdom</h2>
+                <div class="header-line"></div>
+                <button class="btn-secondary" id="refresh-quotes">Refresh Wisdom</button>
+            </div>
+            <div class="anime-grid" id="quotes-grid">
+                <!-- Injected via JS -->
+            </div>
+            <div id="loading" class="loading-quotes">
+                <p>Consulting the Animechan Oracles...</p>
+                <small style="opacity:0.6">(Note: Free API limited to 5 requests/hour. Fallbacks enabled.)</small>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        const ANIMECHAN_URL = 'https://api.animechan.io/v1/quotes/random';
+
+        const FALLBACK_QUOTES = [
+            { quote: "Power comes in response to a need, not a desire. You have to create that need.", character: "Goku", anime: "Dragon Ball Z" },
+            { quote: "The world isn't perfect. But it's there for us, doing the best it can... that's what makes it so damn beautiful.", character: "Roy Mustang", anime: "Fullmetal Alchemist" },
+            { quote: "Fear is not evil. It tells you what your weakness is. And once you know your weakness, you can become stronger as well as kinder.", character: "Gildarts Clive", anime: "Fairy Tail" },
+            { quote: "Whatever you lose, you'll find it again. But what you throw away you'll never get back.", character: "Kenshin Himura", anime: "Rurouni Kenshin" },
+            { quote: "Human beings are strong because we have the ability to change ourselves.", character: "Saitama", anime: "One Punch Man" },
+            { quote: "If you don't take risks, you can't create a future.", character: "Monkey D. Luffy", anime: "One Piece" },
+            { quote: "Hard work betrays none, but dreams betray many.", character: "Hachiman Hikigaya", anime: "Oregairu" },
+            { quote: "People die when they are killed.", character: "Shiro Emiya", anime: "Fate/stay night" },
+            { quote: "I want you to be happy. I want you to laugh a lot. I don't know the exact order of things, but I want you to be happy.", character: "Kaori Miyazono", anime: "Your Lie in April" },
+            { quote: "A dropout will beat a genius through hard work.", character: "Rock Lee", anime: "Naruto" },
+            { quote: "It's just a pathetic drought.", character: "Escanor", anime: "Seven Deadly Sins" },
+            { quote: "Survive and look at the mountain top.", character: "Inosuke Hashibira", anime: "Demon Slayer" },
+            { quote: "Even if I die, I won't kick the bucket!", character: "Monkey D. Luffy", anime: "One Piece" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuotes();
+            document.getElementById('refresh-quotes').addEventListener('click', loadQuotes);
+        });
+
+        async function loadQuotes() {
+            const grid = document.getElementById('quotes-grid');
+            const loading = document.getElementById('loading');
+
+            grid.innerHTML = '';
+            loading.style.display = 'block';
+
+            // We try to request 8 quotes. 
+            // Due to request limit, we mix API calls and fallbacks.
+            const promises = [];
+            for (let i = 0; i < 8; i++) {
+                promises.push(fetchQuoteWithImage(i));
+            }
+
+            const results = await Promise.all(promises);
+
+            loading.style.display = 'none';
+            // Deduplicate logic simpler: just render
+            results.forEach(item => {
+                if (item) renderQuoteCard(grid, item);
+            });
+        }
+
+        async function fetchQuoteWithImage(index) {
+            try {
+                let quoteObj = null;
+
+                // Try API first, but maybe add artificial delay or randomness to avoid hitting limit instantly for all
+                // Actually, with strict 5/hr, we should only try API for maybe index 0-2?
+                // Let's rely on catch() to handle 429.
+                try {
+                    // Small delay to prevent burst issues if any
+                    await new Promise(r => setTimeout(r, index * 200));
+
+                    const qRes = await fetch(ANIMECHAN_URL);
+                    if (qRes.ok) {
+                        const json = await qRes.json();
+                        // Handle potential wrapper
+                        if (json.status === 'success' && json.data) {
+                            quoteObj = {
+                                quote: json.data.content,
+                                anime: json.data.anime.name,
+                                character: json.data.character.name
+                            };
+                        } else if (json.content) { // Fallback to direct object
+                            quoteObj = {
+                                quote: json.content,
+                                anime: json.anime.name,
+                                character: json.character.name
+                            };
+                        }
+                    } else {
+                        throw new Error(`API Status: ${qRes.status}`);
+                    }
+                } catch (apiError) {
+                    console.warn("Animechan API Limit/Error, using fallback:", apiError);
+                    // use fallback
+                    quoteObj = FALLBACK_QUOTES[Math.floor(Math.random() * FALLBACK_QUOTES.length)];
+                }
+
+                if (!quoteObj) quoteObj = FALLBACK_QUOTES[0];
+
+                // 2. Get Image from AniList using title
+                const query = `
+                    query ($search: String) {
+                        Media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
+                            coverImage { extraLarge large }
+                            bannerImage
+                        }
+                    }
+                `;
+
+                const aniRes = await fetch('https://graphql.anilist.co', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, variables: { search: quoteObj.anime } })
+                });
+
+                const aniData = await aniRes.json();
+                const media = aniData.data?.Media;
+
+                return {
+                    quote: quoteObj.quote,
+                    character: quoteObj.character,
+                    anime: quoteObj.anime,
+                    image: media ? (media.coverImage.extraLarge || media.coverImage.large) : 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-CXtrrkMpJ8Zq.png'
+                };
+
+            } catch (e) {
+                console.error(e);
+                // Last resort
+                const fb = FALLBACK_QUOTES[0];
+                return {
+                    quote: fb.quote,
+                    character: fb.character,
+                    anime: fb.anime,
+                    image: 'https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-CXtrrkMpJ8Zq.png'
+                };
+            }
+        }
+
+        function renderQuoteCard(container, item) {
+            const card = document.createElement('div');
+            card.className = 'quote-card';
+            card.innerHTML = `
+                <img class="quote-bg" src="${item.image}" alt="${item.anime}" loading="lazy">
+                <div class="quote-overlay">
+                    <p class="quote-text">"${item.quote}"</p>
+                    <div class="quote-author">${item.character}</div>
+                    <div class="quote-anime">${item.anime}</div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+    </script>
+</body>
+
+</html>
