@@ -16,10 +16,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebarToggle && sidebar) {
         sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            if (mainContent) mainContent.classList.toggle('expanded');
+            if (window.innerWidth <= 600) {
+                sidebar.classList.toggle('open');
+            } else {
+                sidebar.classList.toggle('collapsed');
+                if (mainContent) mainContent.classList.toggle('expanded');
+            }
         });
     }
+
+    // Close sidebar on link click (mobile)
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 600) {
+                sidebar.classList.remove('open');
+            }
+        });
+    });
 
     const exploreBtn = document.querySelector('.btn-primary');
     if (exploreBtn) {

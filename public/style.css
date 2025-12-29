@@ -562,3 +562,43 @@ main {
         font-size: 2.5rem;
     }
 }
+
+/* Extra-small screens (phones) */
+@media (max-width: 600px) {
+    /* Sidebar hidden by default */
+    .sidebar {
+        transform: translateX(-100%);
+        width: 240px;
+        left: 0;
+        padding: 2rem 1.5rem;
+        transition: transform 0.4s ease;
+    }
+    /* When toggled open */
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    /* Make toggle button fixed & visible */
+    #sidebar-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 10001;
+    }
+    /* Hide logo text to save space */
+    .logo-text {
+        font-size: 1.4rem;
+    }
+    /* Main content full-width */
+    main {
+        margin-left: 0;
+        padding-top: 100px;
+    }
+    /* Hero adjustments */
+    #hero {
+        height: auto;
+        padding: 140px 5% 80px;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+}
