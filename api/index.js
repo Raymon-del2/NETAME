@@ -1,6 +1,7 @@
 // Moved from root `server.js` so that static assets in the project
 // are handled by Vercel’s static file serving and the API remains functional.
 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const anigo = require('anigo-anime-api');
@@ -76,4 +77,38 @@ app.get('/api/episode/:id', async (req, res) => {
 });
 
 // Export the Express app for Vercel to wrap as a serverless function
+// If this file is run directly (e.g. `node api/index.js`) start the server.
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`NETAME API listening on port ${PORT}`);
+    });
+}
+
+// Proxy AI chat completion
+app.post('/api/ai', async (req, res) => {
+    try {
+        const apiKey = process.env.GROQ_API_KEY;
+        if (!apiKey) return res.status(500).json({ error: 'GROQ_API_KEY not set' });
+        const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(req.body)
+        });
+        if (!groqRes.ok) {
+            const text = await groqRes.text();
+            console.error('Groq error', groqRes.status, text);
+            return res.status(groqRes.status).json({ error: text });
+        }
+        const data = await groqRes.json();
+        res.json(data);
+    } catch (err) {
+        console.error('Proxy /api/ai error', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = app;

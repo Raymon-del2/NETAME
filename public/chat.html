@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Chat | NETAME</title>
-    <link rel="stylesheet" href="/public/style.css">
+    <link rel="stylesheet" href="/style.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;700&display=swap"
         rel="stylesheet">
@@ -219,12 +219,12 @@
         </div>
     </main>
 
-    <script src="/public/app.js"></script>
+    <script src="/app.js"></script>
     <script>
         // Groq Configuration
-        const API_KEY = process.env.GROQ_API_KEY || 'your-api-key-here';
-        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-        const MODEL = 'moonshotai/kimi-k2-instruct-0905';
+        // Requests are proxied through our backend to keep the API key safe
+const API_URL = '/api/ai';
+                const MODEL = 'llama-3.1-8b-instant';
 
         const input = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-msg');
@@ -232,7 +232,7 @@
 
         // Chat History context
         let history = [
-            { role: "system", content: "You are NETAME AI, a helpful and knowledgeable anime assistant. You help users find anime, explain plots, give recommendations. You also know inspiring quotes from anime known as 'Wise Words'. When a user asks for a wise quote, reply with a powerful quote and attribute it to the anime. When recommending anime include the AniList ID using [anime:ID]. Keep answers concise and friendly." }
+            { role: "system", content: "You are NETAME AI, a helpful and knowledgeable anime assistant. You help users find anime, explain plots, and give personalized recommendations. You also know inspiring quotes from anime known as 'Wise Words'. \n\nIMPORTANT FORMAT RULES:\n• When you recommend ANY anime title you MUST embed its AniList numeric ID in the text exactly as [anime:ID]. For example: Hunter x Hunter (2011) [anime:11061].\n• You may recommend up to 3 titles per request.\n• If the user asks for a wise quote, return the quote followed by \"— Character, Anime\".\nKeep answers concise and friendly." }
         ];
 
         async function send() {
@@ -256,8 +256,7 @@
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${API_KEY}`,
-                        'Content-Type': 'application/json'
+                                                'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         model: MODEL,
@@ -269,8 +268,8 @@
 
                 const data = await response.json();
                 const reply = data.choices[0].message.content;
-                const animeMatches = [...reply.matchAll(/\[anime:(\d+)\]/g)];
-                const cleanReply = reply.replace(/\[anime:\d+\]/g, '').trim();
+                const animeMatches = [...reply.matchAll(/\[[^\]:]*:(\d+)\]/g)];
+                const cleanReply = reply.replace(/\[[^\]:]+:\d+\]/g, '').trim();
 
                 // Remove loading indicator
                 document.getElementById(loadingId).remove();
