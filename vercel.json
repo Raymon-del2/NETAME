@@ -1,6 +1,7 @@
 {
   "outputDirectory": "public",
   "builds": [
+    { "src": "public/**/*", "use": "@vercel/static" },
     { "src": "api/index.js", "use": "@vercel/node" }
   ],
   "routes": [
