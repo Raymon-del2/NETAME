@@ -4,6 +4,10 @@ let isFetchingPopular = false;
 let hasNextPage = true;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Add mobile header
+    if (window.innerWidth <= 600) {
+        createMobileHeader();
+    }
     fetchTrending();
     fetchPopular();
     setupSearch();
@@ -213,4 +217,49 @@ function renderGrid(containerId, mediaList, append = false) {
         });
         container.appendChild(card);
     });
+}
+
+// ---- Mobile Header ----
+function createMobileHeader() {
+    const header = document.createElement('header');
+    header.className = 'mobile-header';
+    header.innerHTML = `
+        <button id="sidebar-toggle" class="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="index.html" class="mobile-logo"><img src="Netame-logo.png" alt="NETAME" /></a>
+        <nav class="mobile-nav">
+          <a href="index.html">Home</a>
+          <a href="movies.html">Movies</a>
+          <a href="tv.html">TV</a>
+          <a href="schedule.html">Schedule</a>
+        </nav>`;
+    document.body.prepend(header);
+
+    // Inject CSS only once
+    if (!document.getElementById('mobile-header-css')) {
+        const style = document.createElement('style');
+        style.id = 'mobile-header-css';
+        style.textContent = `
+        @media(max-width:600px){
+          .mobile-header{display:flex;align-items:center;justify-content:space-between;height:60px;width:100%;position:fixed;top:0;left:0;padding:0 1rem;z-index:10000;background:rgba(5,5,5,.9);backdrop-filter:blur(15px);border-bottom:1px solid var(--border-color);}  
+          .mobile-logo img{height:38px}
+          .hamburger{background:none;border:none;display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:0}
+          .hamburger span{width:24px;height:2px;background:#fff;transition:transform .3s}
+          .mobile-nav{display:flex;gap:0.8rem}
+          .mobile-nav a{color:#fff;text-decoration:none;font-size:.85rem}
+        }
+        @media(min-width:601px){.mobile-header{display:none}}
+        `;
+        document.head.appendChild(style);
+    }
+
+    // add toggle for mobile button
+    const sidebar = document.querySelector('.sidebar');
+    const mobileBtn = header.querySelector('#mobile-menu-btn');
+    if (sidebar && mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+    }
 }
